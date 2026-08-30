@@ -1,2 +1,0 @@
-"use client";
-export default function GlobalError({ reset }: { error: Error & { digest?: string }; reset: () => void }) { return <div className="shell page"><p className="eyebrow">Temporary problem</p><h1>Snow Trail couldn’t load this view.</h1><p className="muted">Please try again. Existing forecast information is never replaced with invented values.</p><button className="retry-button" type="button" onClick={reset}>Try again</button></div>; }
