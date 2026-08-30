@@ -1,2 +1,0 @@
-import Link from 'next/link';
-export function SiteFooter(){return <footer className="site-footer"><div><Link href="/" className="brand"><span className="brand-mark">ST</span><span>Snow Trail</span></Link><p>Know the snow before you go.</p></div><div className="footer-links"><Link href="/search">Search</Link><Link href="/methodology">Methodology</Link></div><div><span className="demo-badge">DEMO DATA</span><p className="footer-note">Synthetic forecast data only. No live weather provider is connected in this prototype.</p></div></footer>}
