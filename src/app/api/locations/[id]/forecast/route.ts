@@ -1,0 +1,1 @@
+import {NextResponse} from 'next/server';import {getForecastForLocation} from '@/services/forecast-orchestrator';export async function GET(_:Request,{params}:{params:Promise<{id:string}>}){const {id}=await params;const d=await getForecastForLocation(id);if(!d)return NextResponse.json({error:'Location not found'},{status:404});return NextResponse.json(d)}

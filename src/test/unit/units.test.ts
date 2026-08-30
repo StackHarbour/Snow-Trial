@@ -1,0 +1,1 @@
+import {describe,it,expect} from 'vitest';import {inchesToCm,cmToInches} from '@/lib/units';describe('units',()=>{it('converts inches and cm',()=>{expect(inchesToCm(1)).toBe(2.54);expect(cmToInches(2.54)).toBe(1)})})

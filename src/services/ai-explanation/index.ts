@@ -1,0 +1,1 @@
+import type {Forecast} from '@/domain/forecast/model';export function explainForecast(f:Forecast){return`The forecast expects ${f.totalSnowfallIn} inches over the available 48-hour window. Confidence is ${f.confidence.level} because ${f.confidence.reasons.join(' ')}`}

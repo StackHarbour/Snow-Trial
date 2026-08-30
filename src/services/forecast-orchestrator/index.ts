@@ -1,0 +1,1 @@
+import {DemoForecastProvider} from '@/providers/demo/provider';import {getLocation} from '@/services/geocoding';const provider=new DemoForecastProvider();export async function getForecastForLocation(id:string){const location=getLocation(id);if(!location)return null;return{location,forecast:await provider.getForecast(location)}}

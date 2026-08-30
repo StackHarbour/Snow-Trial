@@ -1,6 +1,7 @@
-node_modules/
-.next/
-.npm-cache/
-coverage/
-.env.local
-tsconfig.tsbuildinfo
+node_modules
+.next
+out
+.env*
+!.env.example
+coverage
+*.log
