@@ -37,7 +37,7 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
           </div>
 
           <div className="forecast-stats">
-            <div><span>Next snow event</span><strong>{next?.totalIn ?? 0}"</strong><small>{eventStart}–{eventEnd}</small></div>
+            <div><span>Next snow event</span><strong>{next?.totalIn ?? 0}&quot;</strong><small>{eventStart}–{eventEnd}</small></div>
             <div><span>Confidence</span><strong className="capitalize">{forecast.confidence.level}</strong><small>{forecast.confidence.reasons[0]}</small></div>
             <div><span>Current</span><strong>{forecast.current.temperatureF}°</strong><small>{forecast.current.precipitationType}</small></div>
           </div>
