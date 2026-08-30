@@ -1,0 +1,2 @@
+import Link from 'next/link';
+export function SiteNav() { return <nav className="site-nav"><Link href="/" className="brand"><span className="brand-mark">ST</span><span>Snow Trail</span></Link><div className="nav-links"><Link href="/search">Forecast</Link><Link href="/">Snow map</Link><Link href="/methodology">Methodology</Link></div><Link href="/search" className="nav-cta">Check conditions</Link></nav>; }

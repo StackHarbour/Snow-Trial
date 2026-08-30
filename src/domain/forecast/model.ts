@@ -1,4 +1,0 @@
-export type FreshnessStatus = 'fresh'|'stale'|'unavailable'|'partial'; export type ConfidenceLevel='high'|'moderate'|'low'; export type PrecipitationType='snow'|'rain'|'mixed'|'none'|'unknown';
-export interface SourceMetadata{provider:string;model:string;retrievedAt:string;validAt:string;gridResolutionKm:number;quality:'good'|'degraded'|'unknown'}
-export interface HourlyForecast{time:string;snowfallIn:number;accumulationIn:number;snowProbability:number;temperatureF:number;precipitationType:PrecipitationType}
-export interface Forecast{locationId:string;generatedAt:string;timezone:string;current:{snowfallRateIn:number;temperatureF:number;precipitationType:PrecipitationType};hourly:HourlyForecast[];totalSnowfallIn:number;nextSnowEvent:{start:string;end:string;totalIn:number}|null;confidence:{level:ConfidenceLevel;reasons:string[]};freshness:{status:FreshnessStatus;ageMinutes:number;label:string};source:SourceMetadata;warnings:string[]}
