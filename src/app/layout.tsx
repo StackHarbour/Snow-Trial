@@ -1,1 +1,30 @@
-import './globals.css';import Link from 'next/link';export const metadata={title:'Snow Trail — Snow Forecasts Made Clear',description:'Snow-first forecasting with transparent confidence and freshness.'};export default function RootLayout({children}:{children:React.ReactNode}){return <html lang="en"><body><header className="container nav"><Link href="/" className="font-black text-xl tracking-tight">SNOW TRAIL</Link><nav className="navlinks"><Link href="/">Forecast</Link><Link href="/methodology">Methodology</Link></nav></header>{children}<footer className="footer"><div className="container flex flex-col gap-2"><strong>Snow Trail</strong><span className="muted text-sm">Snow-first forecasting. Clearer answers. Transparent data.</span></div></footer></body></html>}
+import './globals.css';
+import Link from 'next/link';
+
+export const metadata = {
+  title: 'Snow Trail — Snow Forecasts Made Clear',
+  description: 'Snow-first forecasting with transparent confidence and freshness.',
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        <header className="container nav">
+          <Link href="/" className="logo">SNOW TRAIL</Link>
+          <nav className="navlinks" aria-label="Primary navigation">
+            <Link href="/">Forecast</Link>
+            <Link href="/methodology">Methodology</Link>
+          </nav>
+        </header>
+        {children}
+        <footer className="footer">
+          <div className="container">
+            <strong>Snow Trail</strong>
+            <p>Snow-first forecasting. Clearer answers. Transparent data.</p>
+          </div>
+        </footer>
+      </body>
+    </html>
+  );
+}

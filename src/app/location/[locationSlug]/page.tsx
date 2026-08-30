@@ -1,2 +1,81 @@
-import {notFound} from 'next/navigation';import {getForecastForLocation} from '@/services/forecast-orchestrator';import {ForecastChart} from '@/components/shared/ForecastChart';import {SnowMap} from '@/components/shared/SnowMap';
-export default async function LocationPage({params}:{params:Promise<{locationSlug:string}>}){const {locationSlug}=await params;const data=await getForecastForLocation(locationSlug);if(!data)notFound();const{location,forecast}=data;const next=forecast.nextSnowEvent;return <main><section className="section"><div className="container"><div className="eyebrow">Location forecast</div><div className="flex flex-wrap justify-between gap-6 items-end mt-2"><div><h1 className="text-5xl font-black tracking-tight">{location.name}</h1><p className="muted mt-1">{location.region}, {location.country} · {location.elevationFt?.toLocaleString()} ft</p></div><div className="pill" style={{background:'#fff3df',color:'#8b5511'}}>DEMO DATA</div></div><div className="grid grid3 mt-8"><div className="card p-6"><div className="eyebrow">Expected snowfall</div><div className="metric mt-2">{forecast.totalSnowfallIn}<span className="text-lg"> in</span></div><p className="muted">Next 48 hours</p></div><div className="card p-6"><div className="eyebrow">Next snow event</div><div className="metric mt-2">{next?.totalIn ?? 0}<span className="text-lg"> in</span></div><p className="muted">Primary forecast window</p></div><div className="card p-6"><div className="eyebrow">Confidence</div><div className="metric mt-2 capitalize">{forecast.confidence.level}</div><p className="muted">{forecast.confidence.reasons[1]}</p></div></div><div className="card p-5 mt-5"><strong>Forecast freshness:</strong> {forecast.freshness.label}. <span className="muted">Nearest available forecast grid; this does not claim exact coordinate-level weather.</span></div><div className="grid grid2 mt-5"><ForecastChart data={forecast.hourly}/><SnowMap location={location}/></div><div className="card p-6 mt-5"><div className="eyebrow">What this means</div><h2 className="text-2xl font-black mt-2">Snowfall is concentrated in the next significant event.</h2><p className="muted mt-2">The forecast model expects {forecast.totalSnowfallIn} inches across the available window. Confidence is {forecast.confidence.level} because {forecast.confidence.reasons.join(' ')}</p></div><details className="card p-6 mt-5"><summary className="font-black cursor-pointer">Data & methodology</summary><div className="muted mt-4 text-sm space-y-2"><p>Provider: {forecast.source.provider}</p><p>Model: {forecast.source.model}</p><p>Retrieved: {new Date(forecast.source.retrievedAt).toLocaleString()}</p><p>Grid resolution: {forecast.source.gridResolutionKm} km</p><p>{forecast.warnings[0]}</p></div></details></div></section></main>}
+import { notFound } from 'next/navigation';
+import { getForecastForLocation } from '@/services/forecast-orchestrator';
+import { ForecastChart } from '@/components/shared/ForecastChart';
+import { SnowMap } from '@/components/shared/SnowMap';
+
+function formatTime(value: string, timezone: string) {
+  return new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', timeZone: timezone }).format(new Date(value));
+}
+
+export default async function LocationPage({ params }: { params: Promise<{ locationSlug: string }> }) {
+  const { locationSlug } = await params;
+  const data = await getForecastForLocation(locationSlug);
+  if (!data) notFound();
+
+  const { location, forecast } = data;
+  const next = forecast.nextSnowEvent;
+  const eventStart = next ? formatTime(next.start, forecast.timezone) : '—';
+  const eventEnd = next ? formatTime(next.end, forecast.timezone) : '—';
+
+  return (
+    <main>
+      <section className="forecast-hero">
+        <div className="container">
+          <div className="forecast-topline">
+            <div>
+              <div className="eyebrow">48-hour snowfall forecast</div>
+              <h1>{location.name}</h1>
+              <p>{location.region}, {location.country} · {location.elevationFt?.toLocaleString()} ft</p>
+            </div>
+            <span className="demo-badge">DEMO DATA</span>
+          </div>
+
+          <div className="forecast-answer">
+            <div className="answer-number">{forecast.totalSnowfallIn}<span> in</span></div>
+            <div className="answer-label">expected snowfall</div>
+            <div className="answer-meta">Next 48 hours · {forecast.freshness.label}</div>
+          </div>
+
+          <div className="forecast-stats">
+            <div><span>Next snow event</span><strong>{next?.totalIn ?? 0}"</strong><small>{eventStart}–{eventEnd}</small></div>
+            <div><span>Confidence</span><strong className="capitalize">{forecast.confidence.level}</strong><small>{forecast.confidence.reasons[0]}</small></div>
+            <div><span>Current</span><strong>{forecast.current.temperatureF}°</strong><small>{forecast.current.precipitationType}</small></div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section forecast-body">
+        <div className="container">
+          <div className="demo-notice"><strong>Demo forecast.</strong> This is synthetic development data, not a live weather forecast. It is intentionally isolated from production provider integrations.</div>
+
+          <div className="forecast-layout">
+            <ForecastChart data={forecast.hourly} />
+            <SnowMap location={location} />
+          </div>
+
+          <div className="explanation-grid">
+            <article className="explanation-card">
+              <div className="eyebrow">What this means</div>
+              <h2>The snow is concentrated in the next major event.</h2>
+              <p>{forecast.totalSnowfallIn} inches are modeled across the available window. The next event contributes {next?.totalIn ?? 0} inches.</p>
+            </article>
+            <article className="explanation-card">
+              <div className="eyebrow">Why the confidence is {forecast.confidence.level}</div>
+              <ul>{forecast.confidence.reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul>
+            </article>
+          </div>
+
+          <details className="provenance-card">
+            <summary>Forecast source & methodology</summary>
+            <div className="provenance-grid">
+              <div><span>Provider</span><strong>{forecast.source.provider}</strong></div>
+              <div><span>Model</span><strong>{forecast.source.model}</strong></div>
+              <div><span>Grid resolution</span><strong>{forecast.source.gridResolutionKm} km</strong></div>
+              <div><span>Retrieved</span><strong>{new Date(forecast.source.retrievedAt).toLocaleString()}</strong></div>
+            </div>
+          </details>
+        </div>
+      </section>
+    </main>
+  );
+}

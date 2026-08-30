@@ -1,33 +1,28 @@
 # Snow Trail
 
-Phase 1 foundation for a snow-first forecasting product. The project is a real Next.js/TypeScript application, not a static mockup.
+Snow Trail is a Phase 1 snow-first forecasting product. The current build is intentionally a **demo data product**: forecasts are synthetic and visibly labeled until a production weather provider is integrated.
 
-## Current implementation
-- Snow-first homepage and search
-- ZIP and location search against an isolated deterministic demo geocoder
-- Location forecast pages with snowfall, event, confidence, freshness and source metadata
-- Forecast chart using Apache ECharts
-- Map architecture placeholder with explicit unavailable state
-- Provider interface and isolated demo forecast provider
-- Domain confidence evaluation and unit helpers
-- API route foundations for search, forecast, map layers, alerts and AI explanation
-- Methodology/trust page
-- Responsive CSS and basic accessible labels
-- Unit test and TypeScript/build scripts
+## Product focus
+- Answer snowfall first: amount, timing, and confidence.
+- Search a mountain, town, resort, or ZIP code.
+- Show a 48-hour snowfall timeline and next snow event.
+- Keep source, freshness, grid context, and uncertainty visible.
+- Keep provider adapters isolated from the UI and domain model.
+- Never represent synthetic data as live weather.
 
-## Demo mode
-The application intentionally uses synthetic deterministic data. Every forecast page labels this clearly. It must not be presented as live weather. Replace `DemoForecastProvider` behind the `ForecastProvider` interface when production credentials/data sources are available.
+## Current coverage
+The deterministic demo geocoder covers Keystone, Breckenridge, Park City, and Mammoth Lakes, plus ZIP 80435 for Keystone.
 
 ## Architecture
-UI → feature/shared components → domain/services → provider adapters → external data sources.
-Provider responses should be validated and normalized before entering the domain model. Business logic does not live in React components.
+`UI → shared components → domain/services → provider adapters → external data sources`
 
-## Run locally
+Provider responses should be validated and normalized before entering the domain model. Production providers should implement `ForecastProvider` without leaking provider-specific schemas into React components.
+
+## Local development
 ```bash
 npm install
 npm run dev
 ```
-Then open http://localhost:3000.
 
 ## Validation
 ```bash
@@ -36,24 +31,27 @@ npm run typecheck
 npm run lint
 npm run build
 ```
-`npm run lint` uses the Next.js lint script where supported by the installed Next version; if the framework removes that command in a future version, replace it with the project's chosen ESLint invocation.
 
-## Environment
-Copy `.env.example` to `.env.local`. No external credentials are required for demo mode. Production providers should keep secrets server-side.
+The repository uses ESLint 9 flat configuration with the Next.js 15 configuration bridged through `FlatCompat`.
 
-## Vercel
-The app is structured as a standard Next.js App Router project. Connect the repository to Vercel, configure environment variables, and deploy with the normal Next.js preset.
+## Demo mode
+The demo provider is deterministic synthetic data. Forecast pages and the homepage explicitly identify demo mode. Do not use the current values as live weather information.
 
-## Replacing demo providers
-Implement `ForecastProvider` and wire it into `ForecastOrchestrator`. Add production geocoding, alert and map adapters without exposing raw provider schemas to UI components. Preserve source metadata, freshness, validation and failure states.
+## Production provider replacement
+Replace `DemoForecastProvider` in the forecast orchestrator with a production adapter. Keep credentials server-side and preserve:
+- source metadata
+- retrieval/valid times
+- freshness status
+- validation and failure states
+- normalized units and precipitation types
+- qualitative confidence reasoning
 
-## Known limitations
-- Demo geocoder covers four locations and ZIP 80435 only.
-- Forecasts are synthetic.
-- Interactive MapLibre layers are not connected to a production tile/weather provider.
+## Known Phase 1 limitations
+- No live weather provider is connected.
+- Map rendering is a contextual preview rather than a production weather layer.
 - Alerts are an explicit unavailable state.
-- AI explanation is deterministic and local; it is not connected to an LLM.
-- Persistent accounts, saved locations and alerts are intentionally deferred.
+- AI explanation is deterministic/local, not an LLM integration.
+- Accounts, saved locations, Find Snow ranking, history, and trip planning are deferred.
 
-## Roadmap
-Phase 2: Find Snow, comparison, storm tracker, history, destination ranking. Phase 3: snow intelligence. Phase 4: trip planning. Phase 5: commercial ecosystem.
+## Deployment
+The project is structured for standard Vercel deployment. Configure production provider secrets only when a real provider adapter is introduced.

@@ -1,1 +1,35 @@
-import Link from 'next/link';import {searchLocations} from '@/services/geocoding';export default async function Search({searchParams}:{searchParams:Promise<{q?:string}>}){const q=(await searchParams).q||'';const results=searchLocations(q);return <main className="container py-12"><div className="eyebrow">Search</div><h1 className="text-4xl font-black mt-2">Results for “{q}”</h1>{results.length?<div className="grid mt-6">{results.map(l=><Link key={l.id} href={`/location/${l.slug}`} className="card p-5"><strong>{l.name}</strong><div className="muted">{l.region}, {l.country} · {l.elevationFt?.toLocaleString()} ft</div></Link>)}</div>:<div className="card p-6 mt-6"><strong>No supported location found.</strong><p className="muted">Check the spelling, try a ZIP code, or choose another supported location.</p></div>}</main>}
+import Link from 'next/link';
+import { searchLocations } from '@/services/geocoding';
+
+export default async function Search({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
+  const q = (await searchParams).q || '';
+  const results = searchLocations(q);
+
+  return (
+    <main className="section">
+      <div className="container">
+        <div className="eyebrow">Location search</div>
+        <h1 className="search-title">Results for “{q}”</h1>
+        {results.length ? (
+          <div className="search-results">
+            {results.map((location) => (
+              <Link key={location.id} href={`/location/${location.slug}`} className="search-result">
+                <div>
+                  <strong>{location.name}</strong>
+                  <span>{location.region}, {location.country}</span>
+                </div>
+                <div className="result-arrow">→</div>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className="empty-result">
+            <strong>No supported location found.</strong>
+            <p>Try a mountain, town, or ZIP code from the current demo coverage.</p>
+            <Link href="/" className="text-link">← Back to search</Link>
+          </div>
+        )}
+      </div>
+    </main>
+  );
+}

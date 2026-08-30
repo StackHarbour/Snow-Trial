@@ -13,24 +13,22 @@ export class DemoForecastProvider implements ForecastProvider {
     const hourly: HourlyForecast[] = Array.from({ length: 48 }, (_, i) => {
       const t = new Date(Date.now() + i * 3600000);
       const active = i >= 9 && i <= 21;
-      const snow = active
-        ? Number((0.18 + 0.08 * Math.sin(i)).toFixed(2))
-        : 0;
+      const snow = active ? Number((0.18 + 0.08 * Math.sin(i)).toFixed(2)) : 0;
+      const precipitationType: HourlyForecast['precipitationType'] = active ? 'snow' : 'none';
 
       return {
         time: t.toISOString(),
         snowfallIn: snow,
         accumulationIn: Number((snow * (i + 1)).toFixed(1)),
-        snowProbability: active
-          ? Math.min(95, 55 + (i % 5) * 7)
-          : 12,
+        snowProbability: active ? Math.min(95, 55 + (i % 5) * 7) : 12,
         temperatureF: 30 - Math.round(4 * Math.sin(i / 6)),
-        precipitationType: active ? 'snow' : 'none',
+        precipitationType,
       };
     });
 
-    const total = Number(
-      hourly.reduce((s, h) => s + h.snowfallIn, 0).toFixed(1)
+    const total = Number(hourly.reduce((sum, hour) => sum + hour.snowfallIn, 0).toFixed(1));
+    const eventTotal = Number(
+      hourly.slice(9, 22).reduce((sum, hour) => sum + hour.snowfallIn, 0).toFixed(1),
     );
 
     const source = {
@@ -56,27 +54,12 @@ export class DemoForecastProvider implements ForecastProvider {
       nextSnowEvent: {
         start: hourly[9].time,
         end: hourly[21].time,
-        totalIn: Number(
-          hourly
-            .slice(9, 22)
-            .reduce((s, h) => s + h.snowfallIn, 0)
-            .toFixed(1)
-        ),
+        totalIn: eventTotal,
       },
-      confidence: evaluateConfidence({
-        source,
-        horizonHours: 48,
-        precipitationType: 'snow',
-      }),
-      freshness: {
-        status: 'fresh',
-        ageMinutes: 0,
-        label: 'Updated just now',
-      },
+      confidence: evaluateConfidence({ source, horizonHours: 48, precipitationType: 'snow' }),
+      freshness: { status: 'fresh', ageMinutes: 0, label: 'Updated just now' },
       source,
-      warnings: [
-        'DEMO DATA — this forecast is synthetic and is not live weather.',
-      ],
+      warnings: ['DEMO DATA — this forecast is synthetic and is not live weather.'],
     };
   }
 }

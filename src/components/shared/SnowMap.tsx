@@ -1,1 +1,21 @@
-export function SnowMap({location}:{location:{latitude:number;longitude:number}}){return <div className="card p-5"><div className="eyebrow">Snow map</div><div className="mt-3 rounded-2xl overflow-hidden" style={{height:300,background:'linear-gradient(145deg,#dbeef5,#edf5f7 48%,#c9d9df)'}}><div className="h-full flex items-center justify-center text-center p-8"><div><div className="text-4xl">⌖</div><strong>Map layer architecture ready</strong><p className="muted text-sm mt-1">{location.latitude.toFixed(3)}, {location.longitude.toFixed(3)} · Interactive MapLibre integration can be enabled with a production map provider.</p></div></div></div></div>}
+export function SnowMap({ location }: { location: { latitude: number; longitude: number } }) {
+  return (
+    <div className="card snow-map">
+      <div className="section-head">
+        <div>
+          <div className="eyebrow">Snow map</div>
+          <h2>Location context</h2>
+        </div>
+        <span className="mini-label">Preview</span>
+      </div>
+      <div className="map-surface">
+        <div className="map-grid" aria-hidden="true" />
+        <div className="map-pin" aria-hidden="true" />
+        <div className="map-copy">
+          <strong>Map layer not connected</strong>
+          <p>{location.latitude.toFixed(3)}, {location.longitude.toFixed(3)} · Production weather tiles will be added behind the map adapter.</p>
+        </div>
+      </div>
+    </div>
+  );
+}

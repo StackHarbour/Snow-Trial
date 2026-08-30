@@ -1,1 +1,16 @@
-import Link from 'next/link';export default function NotFound(){return <main className="container py-20"><div className="card p-8 max-w-xl"><div className="eyebrow">404</div><h1 className="text-4xl font-black mt-2">Location not found</h1><p className="muted mt-2">This location is not in the current demo coverage set.</p><Link className="inline-block mt-5 font-black" href="/">← Back to search</Link></div></main>}
+import Link from 'next/link';
+
+export default function NotFound() {
+  return (
+    <main className="section">
+      <div className="container">
+        <div className="empty-result">
+          <div className="eyebrow">404</div>
+          <h1 className="search-title">Location not found.</h1>
+          <p>This location is not in the current demo coverage set.</p>
+          <Link className="text-link" href="/">← Back to search</Link>
+        </div>
+      </div>
+    </main>
+  );
+}
