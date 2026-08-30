@@ -29,7 +29,7 @@ export class OpenMeteoGeocodingProvider implements GeocodingProvider {
   private base = 'https://geocoding-api.open-meteo.com/v1/search';
 
   async search(query: string): Promise<LocationSearchResult[]> {
-    const params = new URLSearchParams({ name: query.trim(), count: '8', language: 'en', format: 'json', countryCode: 'US' });
+    const params = new URLSearchParams({ name: query.trim(), count: '8', language: 'en', format: 'json' });
     const key = env('OPEN_METEO_API_KEY');
     if (key) params.set('apikey', key);
     const { data } = await fetchJson<OpenMeteoResponse>(`${this.base}?${params.toString()}`);

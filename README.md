@@ -1,12 +1,12 @@
 # Snow Trail
 
-Snow-first forecast platform for real U.S. locations.
+Snow-first forecast platform for real locations.
 
 ## Current implementation
 
 - Next.js App Router 16.3.3 with React 19.2.8.
-- NWS API as the authoritative U.S. forecast/alert source.
-- Open-Meteo geocoding for city/ZIP/mountain search, with an explicit commercial-license boundary.
+- NWS API as the authoritative U.S. forecast/alert source, with Open-Meteo forecast coverage for locations outside the U.S.
+- Open-Meteo geocoding for global city/place/postal-code search, with an explicit commercial-license boundary.
 - OpenFreeMap + MapLibre GL JS for the production-capable map baseline; commercial use is explicitly permitted by OpenFreeMap's current terms.
 - Recharts for forecast visualization.
 - Server-side provider adapters and a normalized forecast domain model.
@@ -75,6 +75,6 @@ Snow Trail does not manufacture a single “truth” from conflicting providers.
 ## Known limitations
 
 - The initial build uses NWS as the production U.S. baseline; NWS does not expose every snow-specific metric uniformly for every grid.
-- Open-Meteo is integrated as a search/supplemental provider boundary but requires the correct commercial entitlement for commercial deployment.
+- Open-Meteo provides global geocoding and non-U.S. forecast coverage; configure the appropriate commercial entitlement before commercial launch.
 - The snow map currently visualizes real selected-location forecast context rather than pretending to have a nationwide proprietary weather-radar/snowfall raster layer. A true nationwide weather raster layer should be added as a dedicated licensed data provider in a later increment.
 - AI explanation is disabled unless an AI provider is configured. It never fabricates missing weather data.

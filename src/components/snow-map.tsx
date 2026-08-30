@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { Layers3, MapPin } from 'lucide-react';
 import { Map, NavigationControl, setWorkerUrl } from 'maplibre-gl';
+import type { GeoJSONSource } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import type { CanonicalLocation } from '@/domain/location/types';
 import type { Alert, ForecastResult } from '@/domain/forecast/types';
@@ -30,8 +31,8 @@ export function SnowMap({ location, forecast, alerts }: { location: CanonicalLoc
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !map.isStyleLoaded()) return;
-    const source = map.getSource('snow-context');
-    if (!source || !('setData' in source)) return;
+    const source = map.getSource<GeoJSONSource>('snow-context');
+    if (!source) return;
     const snow = forecast?.snow.next24hIn ?? 0;
     source.setData({ type: 'FeatureCollection', features: snow > 0 ? [{ type: 'Feature', geometry: { type: 'Point', coordinates: [location.longitude, location.latitude] }, properties: { snow } }] : [] });
   }, [forecast, location]);
