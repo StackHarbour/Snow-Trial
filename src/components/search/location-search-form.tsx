@@ -1,0 +1,2 @@
+interface LocationSearchFormProps { defaultValue?: string; compact?: boolean }
+export function LocationSearchForm({ defaultValue = "", compact = false }: LocationSearchFormProps) { return <form action="/search" className={compact ? "search-form compact" : "search-form"}><label htmlFor="location-query" className="sr-only">Search for a city, ZIP code, resort, or mountain</label><input id="location-query" name="q" defaultValue={defaultValue} placeholder="City, ZIP code, resort, or mountain" autoComplete="off" required /><button type="submit">Find snow</button></form>; }

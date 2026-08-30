@@ -1,0 +1,1 @@
+export default function LoadingLocation() { return <div className="shell page" aria-busy="true" aria-live="polite"><p className="eyebrow">Loading forecast</p><h1>Preparing forecast details…</h1><div className="metric-grid">{Array.from({ length: 4 }, (_, index) => <div className="forecast-card" key={index}><p>Loading forecast data</p></div>)}</div></div>; }
